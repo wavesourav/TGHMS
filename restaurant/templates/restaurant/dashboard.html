@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <title>Restaurant-Dashboard</title>
+    <style>
+        .card{
+            height: 300px;
+
+           box-shadow: 5px 5px 20px rgb(90, 45, 100);
+
+        overflow:scroll;
+
+
+        }
+
+        body{
+                                   background-image: url('https://images.pexels.com/photos/531880/pexels-photo-531880.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" >TGHM</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                         <a class="nav-link active" aria-current="page" href="/" style="margin-left: 1260px;"><b>Log out</b></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav><br>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Information</h5>
+                        <div class="card-text">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Name:</td>
+                                        <td>{{restaurant.name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Username:</td>
+                                        <td>{{restaurant.username}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Station:</td>
+                                        <td>{{restaurant.station.name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Phone Number:</td>
+                                        <td>{{restaurant.mobile}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Order Status</h5>
+                        <div class="card-text">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Order ID</th>
+
+                                        <th scope="col">Plates</th>
+                                        <th scope="col">Food Item</th>
+                                        <th scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in order_list %}
+                                    <tr>
+                                        <td>{{order.id}}</td>
+                                        <td>{{order.plates}}</td>
+                                        {% for food in food_list %}
+                                        {% if food.id == order.food_item %}
+                                            <td>{{food.name}}</td>
+                                        {% endif %}
+                                        {% endfor %}
+                                        {% if order.status == 0 %}
+                                        <td><a class="btn btn-primary" href="/restaurant/change_status/{{order.id}}">Accept Order</a></td>
+                                        {% elif order.status == 1 %}
+                                        <td>Accepted</td>
+                                        {% elif order.status == 2 %}
+                                        <td>Delivered</td>
+                                        {% endif %}
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Add Food Item</h5>
+                        <div class="card-text">
+                            <form action="/restaurant/add_food/{{restaurant.id}}" method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="food_name">Food Name</label>
+                                    <input type="text" class="form-control" id="food_name" name="food_name"
+                                        placeholder="Enter Food Name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="food_price">Food Price</label>
+                                    <input type="text" class="form-control" id="food_price" name="food_price"
+                                        placeholder="Enter Food Price">
+                                </div>
+                                <div class="form-group">
+                                    <label for="food_time">Time taken for delivery(minutes)</label>
+                                    <input type="text" class="form-control" id="food_time" name="food_time"
+                                        placeholder="Enter estimated time for delivery">
+                                </div>
+                                <br><button type="submit" class="btn btn-primary" style="margin-top:0px">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Menu</h5>
+                        <div class="card-text">
+                            {% if food_list %}
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Food Item</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">delivery_time(in minutes)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in food_list %}
+                                    <tr>
+                                        <td>{{item.name}}</td>
+                                        <td>{{item.price}}</td>
+                                        <td>{{item.f_time}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% else %}
+                            <p>No Food Items</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>
