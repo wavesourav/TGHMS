@@ -1,5 +1,5 @@
-# CSE-6th-Semester-IIT-KGP  
-### `Disclaimer:` Do not copy codes though. Heavy penalization for plagiarism.    
+# CSE-4th-Semester-IIT-KGP  
+### Team "runtime_error" Software engineering Laboratory IIT KGP    
 
 # Travel In Good Health Management System
 
@@ -17,10 +17,4 @@ py manage.py migrate
 py manage.py runserver
 ```
 
-## Testing
 
-```bash
-python3 manage.py test -v 3 --testrunner auto_test.HtmlTestReporter
-```
-
-The report gets saved in a folder named reports.
