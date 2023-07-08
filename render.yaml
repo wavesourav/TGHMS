@@ -1,7 +1,3 @@
-databases:
-  - name: mysite
-    databaseName: mysite
-    user: mysite
 
 services:
   - type: web
@@ -14,12 +10,4 @@ services:
       python manage.py makemigrations
       python manage.py migrate
     startCommand: gunicorn mysite.wsgi:application
-    envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: mysite
-          property: connectionString
-      - key: SECRET_KEY
-        generateValue: true
-      - key: WEB_CONCURRENCY
-        value: 4
+   
